@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ptnzzn_random/constants/app_router.dart';
 import 'package:ptnzzn_random/constants/app_theme.dart';
+import 'package:ptnzzn_random/presentation/wheel/wheel_cubit.dart';
 import 'package:ptnzzn_random/presentation/yes_no/yes_no_cubit.dart';
 
 void main() {
@@ -18,6 +19,10 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => YesNoCubit(),
             lazy: false,
+          ),
+          BlocProvider(
+            create: (context) => WheelCubit(),
+            lazy: false
           ),
         ],
         child: MaterialApp.router(
