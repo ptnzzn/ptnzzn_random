@@ -1,6 +1,7 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ptnzzn_random/logic/cubit/yes_no_cubit.dart';
+import 'package:ptnzzn_random/presentation/yes_no/yes_no_cubit.dart';
 
 class YesNoScreen extends StatelessWidget {
   const YesNoScreen({super.key});
@@ -9,14 +10,44 @@ class YesNoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Random Yes or No'),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.chevron_left,
+            size: 32,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: Center(
         child: BlocBuilder<YesNoCubit, String>(
           builder: (context, state) {
-            return Text(
-              state,
-              style: const TextStyle(fontSize: 24),
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                DefaultTextStyle(
+                  style: const TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.black,
+                  ),
+                  child: AnimatedTextKit(
+                    animatedTexts: [
+                      TypewriterAnimatedText(
+                        'Click to get Yes or No',
+                        speed: const Duration(milliseconds: 100),
+                      ),
+                    ],
+                    repeatForever: false,
+                    totalRepeatCount: 1
+                  ),
+                ),
+                const SizedBox(height: 32),
+                Text(
+                  state.isEmpty ? '' : state,
+                  style: const TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ],
             );
           },
         ),

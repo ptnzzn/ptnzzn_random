@@ -2,9 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'dart:math';
 
 class YesNoCubit extends Cubit<String> {
-  YesNoCubit() : super('') {
-    getRandomYesNo();
-  }
+  YesNoCubit() : super('');
 
   void getRandomYesNo() {
     final random = Random(

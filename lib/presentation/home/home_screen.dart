@@ -2,13 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ptnzzn_random/constants/app_color.dart';
+import 'package:ptnzzn_random/constants/app_theme.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () => {},
+          ),
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -19,7 +30,7 @@ class HomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   width: 220,
                   decoration: BoxDecoration(
-                    color: AppColors.lightBlue,
+                    color: isDarkTheme ? AppColors.blue : AppColors.lightBlue,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
@@ -33,7 +44,7 @@ class HomeScreen extends StatelessWidget {
                             Text(
                               'Yes',
                               style: TextStyle(
-                                  color: AppColors.blue,
+                                  color: isDarkTheme ? AppColors.lightBlue : AppColors.blue,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16),
                             ),
@@ -47,7 +58,7 @@ class HomeScreen extends StatelessWidget {
                             Text(
                               'No',
                               style: TextStyle(
-                                  color: AppColors.blue,
+                                  color: isDarkTheme ? AppColors.lightBlue : AppColors.blue,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16),
                             ),
@@ -72,7 +83,7 @@ class HomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   width: 220,
                   decoration: BoxDecoration(
-                    color: AppColors.lightOrange,
+                    color: isDarkTheme ? AppColors.orange : AppColors.lightOrange,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
@@ -84,25 +95,12 @@ class HomeScreen extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'Fortune',
+                              'Fortune spin wheel',
                               style: TextStyle(
-                                  color: AppColors.orange,
+                                  color: isDarkTheme ? AppColors.lightOrange : AppColors.orange,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16),
-                            ),
-                            Text(
-                              ' spin ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                            Text(
-                              'wheel',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16),
-                            ),
+                            )
                           ],
                         ),
                       ),

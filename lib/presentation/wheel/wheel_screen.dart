@@ -85,7 +85,6 @@ class _WheelScreenState extends State<WheelScreen> {
                 },
                 selected: selected.stream,
                 items: _items.map((item) {
-                  final color = _getRandomLightColor();
                   return FortuneItem(
                     child: Text(item,
                         style: TextStyle(
@@ -94,7 +93,7 @@ class _WheelScreenState extends State<WheelScreen> {
                           fontWeight: FontWeight.bold,
                         )),
                     style: FortuneItemStyle(
-                      color: color,
+                      color: AppColors.lightOrange,
                       borderColor: AppColors.white,
                       borderWidth: 2,
                     ),

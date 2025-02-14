@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ptnzzn_random/constants/app_router.dart';
-import 'package:ptnzzn_random/logic/cubit/yes_no_cubit.dart';
+import 'package:ptnzzn_random/constants/app_theme.dart';
+import 'package:ptnzzn_random/presentation/yes_no/yes_no_cubit.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +21,8 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp.router(
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
           debugShowCheckedModeBanner: false,
           routerConfig: AppRouter.router,
         ));
