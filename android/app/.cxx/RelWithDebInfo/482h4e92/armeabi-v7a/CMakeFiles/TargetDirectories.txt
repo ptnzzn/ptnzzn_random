@@ -1,0 +1,2 @@
+D:/dev/ptnzzn_random/android/app/.cxx/RelWithDebInfo/482h4e92/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/dev/ptnzzn_random/android/app/.cxx/RelWithDebInfo/482h4e92/armeabi-v7a/CMakeFiles/rebuild_cache.dir

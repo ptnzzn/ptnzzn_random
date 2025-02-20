@@ -40,6 +40,9 @@ dependencies:
   flutter_svg: ^2.0.17
   animated_text_kit: ^4.2.3
   flutter_launcher_icons:
+  shared_preferences: ^2.5.2
+  provider: ^6.1.2
+  rxdart: ^0.28.0
 
 dev_dependencies:
   flutter_test:

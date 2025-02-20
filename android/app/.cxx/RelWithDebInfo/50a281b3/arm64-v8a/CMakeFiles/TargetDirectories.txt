@@ -1,0 +1,2 @@
+D:/dev/ptnzzn_random/android/app/.cxx/RelWithDebInfo/50a281b3/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/dev/ptnzzn_random/android/app/.cxx/RelWithDebInfo/50a281b3/arm64-v8a/CMakeFiles/rebuild_cache.dir

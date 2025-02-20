@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:ptnzzn_random/presentation/history/history_screen.dart';
 import 'package:ptnzzn_random/presentation/home/home_screen.dart';
 import 'package:ptnzzn_random/presentation/wheel/wheel_screen.dart';
 import 'package:ptnzzn_random/presentation/yes_no/yes_no_screen.dart';
@@ -21,6 +22,11 @@ class AppRouter {
               path: 'wheel', 
               name: 'wheel', 
               builder: (context, state) => WheelScreen(),
+            ),
+            GoRoute(
+              path: 'history',
+              name: 'history',
+              builder: (context, state) => HistoryScreen(),
             ),
           ]),
     ],

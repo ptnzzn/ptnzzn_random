@@ -1,16 +1,17 @@
 import 'package:bloc/bloc.dart';
+import 'package:ptnzzn_random/logic/storage/history_storage.dart';
 import 'dart:async';
 import 'dart:math';
-
-import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'wheel_state.dart';
 
 class WheelCubit extends Cubit<WheelState> {
+  final HistoryStorage historyStorage;
   final Random _random = Random();
-  final StreamController<int> _selectedController = StreamController<int>();
+  final BehaviorSubject<int> _selectedController = BehaviorSubject<int>();
 
-  WheelCubit() : super(WheelState.initial());
+  WheelCubit(this.historyStorage) : super(WheelState.initial());
 
   Stream<int> get selectedStream => _selectedController.stream;
 
@@ -19,7 +20,7 @@ class WheelCubit extends Cubit<WheelState> {
     emit(state.copyWith(items: items));
   }
 
-  void spinWheel() {
+  void spinWheel() async {
     if (state.items.length > 1) {
       emit(state.copyWith(isSpinning: true));
       final selectedIndex = _random.nextInt(state.items.length);
@@ -27,6 +28,8 @@ class WheelCubit extends Cubit<WheelState> {
       Future.delayed(Duration(seconds: 5), () {
         emit(state.copyWith(selectedIndex: selectedIndex, isSpinning: false));
       });
+      final result = state.items[selectedIndex];
+      await historyStorage.writeHistory('spin-wheel', result);
     }
   }
 
