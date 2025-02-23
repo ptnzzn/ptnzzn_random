@@ -1,8 +1,39 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:ptnzzn_random/constants/app_color.dart';
 import 'package:ptnzzn_random/presentation/wheel/wheel_cubit.dart';
+
+class WheelScreenListener extends StatelessWidget {
+  const WheelScreenListener({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<WheelCubit, WheelState>(
+      listener: (context, state) {
+        if (!state.isSpinning && state.result != null) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('spin-wheel.result'.tr()),
+                content: Text('spin-wheel.winner'.tr(args: [state.result ?? ''])),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text('common.agree'.tr()),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      },
+      child: WheelScreen(),
+    );
+  }
+}
 
 class WheelScreen extends StatelessWidget {
   const WheelScreen({super.key});
@@ -60,9 +91,9 @@ class WheelScreen extends StatelessWidget {
             TextField(
               controller: TextEditingController(),
               maxLines: 5,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Enter items, separated by new lines',
+                labelText: 'spin-wheel.input-label'.tr(),
               ),
               onChanged: (text) {
                 final items = text.split('\n').where((item) => item.isNotEmpty).toList();
@@ -74,7 +105,7 @@ class WheelScreen extends StatelessWidget {
               builder: (context, state) {
                 return AnimatedContainer(
                   duration: Duration(milliseconds: 650),
-                  width: state.isSpinning ? 120 : 200,
+                  width: state.isSpinning ? 140 : 200,
                   height: state.isSpinning ? 50 : 60,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -82,7 +113,7 @@ class WheelScreen extends StatelessWidget {
                     ),
                     onPressed: state.isSpinning ? null : () => context.read<WheelCubit>().spinWheel(),
                     child: Text(
-                      state.isSpinning ? 'Spinning' : 'Spin',
+                      state.isSpinning ? 'spin-wheel.spinning'.tr() : 'spin-wheel.spin'.tr(),
                       style: TextStyle(
                         color: state.isSpinning ? Colors.grey : AppColors.white,
                         fontSize: 16,

@@ -21,7 +21,7 @@ class AppRouter {
             GoRoute(
               path: 'wheel', 
               name: 'wheel', 
-              builder: (context, state) => WheelScreen(),
+              builder: (context, state) => WheelScreenListener(),
             ),
             GoRoute(
               path: 'history',

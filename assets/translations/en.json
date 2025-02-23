@@ -1,0 +1,41 @@
+{
+    "common": {
+        "agree": "Agree",
+        "cancel": "Cancel",
+        "yes": "Yes",
+        "no": "No",
+        "yes-no": "Yes or No",
+        "spin-wheel": "Spin wheel"
+    },
+    "home": {
+        "yes": "Yes",
+        "or": " or ",
+        "no": "No",
+        "spin-wheel": "Fortune spin wheel",
+        "settings": {
+            "history": "History",
+            "theme": "Theme",
+            "language": "Language",
+            "about": "About"
+        }
+    },
+    "yes-no": {
+        "label": "Let the heavens respond to the doubts in your heart",
+        "yes": "The heavens have answered, and the answer is ",
+        "no": "The heavens reply with a ",
+        "no-end": ", it might be a blessing in disguise, you know."
+    },
+    "spin-wheel": {
+        "input-label": "Enter items, separated by new line",
+        "spin": "Spin",
+        "spinning": "Spinning",
+        "result": "Result",
+        "winner": "Congratulations, %s!"
+    },
+    "history": {
+        "title": "History",
+        "clear-history": "Clear history",
+        "clear-history-confirmation": "Are you sure you want to clear history?",
+        "no-history": "No history yet"
+    }
+}

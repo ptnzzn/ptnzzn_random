@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -36,9 +37,15 @@ class HomeScreen extends StatelessWidget {
                       label: Text('Dark'),
                     ),
                   ],
-                  selected: {context.read<ThemeCubit>().state.brightness == Brightness.dark ? AppThemeMode.dark : AppThemeMode.light},
+                  selected: {
+                    context.read<ThemeCubit>().state.brightness ==
+                            Brightness.dark
+                        ? AppThemeMode.dark
+                        : AppThemeMode.light
+                  },
                   onSelectionChanged: (Set<Object> newSelection) {
-                    context.read<ThemeCubit>().changeTheme(newSelection.first as AppThemeMode, context);
+                    context.read<ThemeCubit>().changeTheme(
+                        newSelection.first as AppThemeMode, context);
                     Navigator.of(context).pop();
                   },
                 ),
@@ -60,28 +67,32 @@ class HomeScreen extends StatelessWidget {
               children: [
                 ListTile(
                   leading: Icon(Icons.history),
-                  title: Text('History'),
+                  title: Text('home.settings.history'.tr()),
                   onTap: () {
                     context.pushNamed('history');
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.brightness_6),
-                  title: Text('Theme'),
+                  title: Text('home.settings.theme'.tr()),
                   onTap: () {
                     showThemeChangeDialog(context);
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.language),
-                  title: Text('Language'),
+                  title: Text('home.settings.language'.tr()),
                   onTap: () {
-                    // Handle language change
+                    if (context.locale == Locale('en')) {
+                      context.setLocale(Locale('vi'));
+                    } else {
+                      context.setLocale(Locale('en'));
+                    }
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.info),
-                  title: Text('About'),
+                  title: Text('home.settings.about'.tr()),
                   onTap: () {
                     // Handle about
                   },
@@ -126,24 +137,28 @@ class HomeScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Yes',
+                            'home.yes'.tr(),
                             style: TextStyle(
-                              color: isDarkTheme ? AppColors.lightBlue : AppColors.blue,
+                              color: isDarkTheme
+                                  ? AppColors.lightBlue
+                                  : AppColors.blue,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
                           ),
                           Text(
-                            ' or ',
+                            'home.or'.tr(),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
                           ),
                           Text(
-                            'No',
+                            'home.no'.tr(),
                             style: TextStyle(
-                              color: isDarkTheme ? AppColors.lightBlue : AppColors.blue,
+                              color: isDarkTheme
+                                  ? AppColors.lightBlue
+                                  : AppColors.blue,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
@@ -182,9 +197,11 @@ class HomeScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Fortune spin wheel',
+                            'home.spin-wheel'.tr(),
                             style: TextStyle(
-                              color: isDarkTheme ? AppColors.lightOrange : AppColors.orange,
+                              color: isDarkTheme
+                                  ? AppColors.lightOrange
+                                  : AppColors.orange,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),

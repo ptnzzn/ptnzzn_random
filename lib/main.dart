@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -8,8 +9,18 @@ import 'package:ptnzzn_random/logic/theme/theme_cubit.dart';
 import 'package:ptnzzn_random/presentation/wheel/wheel_cubit.dart';
 import 'package:ptnzzn_random/presentation/yes_no/yes_no_cubit.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
+  runApp(
+    EasyLocalization(
+      supportedLocales: [Locale('en'), Locale('vi')],
+      path: 'assets/translations',
+      fallbackLocale: Locale('en'),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -42,6 +53,9 @@ class MyApp extends StatelessWidget {
         darkTheme: AppTheme.darkTheme,
         debugShowCheckedModeBanner: false,
         routerConfig: AppRouter.router,
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
       ),
     );
   }

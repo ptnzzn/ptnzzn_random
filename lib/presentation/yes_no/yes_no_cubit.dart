@@ -14,8 +14,9 @@ class YesNoCubit extends Cubit<String> {
     );
     final currentTime = DateTime.now().millisecondsSinceEpoch;
     final combinedRandom = currentTime + random.nextInt(1000);
-    final result = combinedRandom % 2 == 0 ? 'Yes' : 'No';
+    final result = combinedRandom % 2 == 0 ? 'yes' : 'no';
     emit(result);
-    await historyStorage.writeHistory('yes-no', result);
+    print('YesNoCubit: $result');
+    await historyStorage.writeHistory('common.yes-no', result);
   }
 }

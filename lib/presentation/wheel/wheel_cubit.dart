@@ -25,11 +25,15 @@ class WheelCubit extends Cubit<WheelState> {
       emit(state.copyWith(isSpinning: true));
       final selectedIndex = _random.nextInt(state.items.length);
       _selectedController.add(selectedIndex);
-      Future.delayed(Duration(seconds: 5), () {
-        emit(state.copyWith(selectedIndex: selectedIndex, isSpinning: false));
+      Future.delayed(Duration(seconds: 5), () async {
+        final result = state.items[selectedIndex];
+        emit(state.copyWith(
+          selectedIndex: selectedIndex, 
+          isSpinning: false,
+          result: result,
+        ));
+        await historyStorage.writeHistory('common.spin-wheel', result);
       });
-      final result = state.items[selectedIndex];
-      await historyStorage.writeHistory('spin-wheel', result);
     }
   }
 
