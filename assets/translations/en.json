@@ -23,19 +23,35 @@
         "label": "Let the heavens respond to the doubts in your heart",
         "yes": "The heavens have answered, and the answer is ",
         "no": "The heavens reply with a ",
-        "no-end": ", it might be a blessing in disguise, you know."
+        "no-end": ", it might be a blessing in disguise, you know.",
+        "get-answer": "Get answer",
+        "again": "Again"
     },
     "spin-wheel": {
         "input-label": "Enter items, separated by new line",
         "spin": "Spin",
         "spinning": "Spinning",
         "result": "Result",
-        "winner": "Congratulations, %s!"
+        "winner": "Congratulations, "
     },
     "history": {
         "title": "History",
         "clear-history": "Clear history",
         "clear-history-confirmation": "Are you sure you want to clear history?",
         "no-history": "No history yet"
+    },
+    "theme": {
+        "label": "Select Theme",
+        "system": "System",
+        "light": "Light",
+        "dark": "Dark"
+    },
+    "language": {
+        "label": "Language"
+    },
+    "about": {
+        "title": "About",
+        "version": "Version: ",
+        "description": "This is a simple app I created in my spare time. The app helps you make quick decisions with a simple \"yes\" or \"no\" option or by spinning a wheel. Perfect for anyone who needs a bit of randomness in their choices."
     }
 }

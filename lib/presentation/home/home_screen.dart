@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ptnzzn_random/constants/app_color.dart';
+import 'package:ptnzzn_random/constants/app_theme.dart';
 import 'package:ptnzzn_random/logic/theme/theme_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -17,39 +18,43 @@ class HomeScreen extends StatelessWidget {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Select Theme'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SegmentedButton(
-                  segments: [
-                    ButtonSegment(
-                      value: AppThemeMode.system,
-                      label: Text('System'),
-                    ),
-                    ButtonSegment(
-                      value: AppThemeMode.light,
-                      label: Text('Light'),
-                    ),
-                    ButtonSegment(
-                      value: AppThemeMode.dark,
-                      label: Text('Dark'),
-                    ),
-                  ],
-                  selected: {
-                    context.read<ThemeCubit>().state.brightness ==
-                            Brightness.dark
-                        ? AppThemeMode.dark
-                        : AppThemeMode.light
-                  },
-                  onSelectionChanged: (Set<Object> newSelection) {
-                    context.read<ThemeCubit>().changeTheme(
-                        newSelection.first as AppThemeMode, context);
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
+          return Dialog(
+            child: Container(
+              width: 400,
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "theme.label".tr(),
+                  ),
+                  const SizedBox(height: 16),
+                  SegmentedButton(
+                    segments: [
+                      ButtonSegment(
+                        value: AppThemeMode.system,
+                        label: Text('theme.system'.tr()),
+                      ),
+                      ButtonSegment(
+                        value: AppThemeMode.light,
+                        label: Text('theme.light'.tr()),
+                      ),
+                      ButtonSegment(
+                        value: AppThemeMode.dark,
+                        label: Text('theme.dark'.tr()),
+                      ),
+                    ],
+                    selected: {
+                      context.read<ThemeCubit>().currentThemeMode
+                    },
+                    onSelectionChanged: (Set<Object> newSelection) {
+                      context.read<ThemeCubit>().changeTheme(
+                          newSelection.first as AppThemeMode, context);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -89,12 +94,14 @@ class HomeScreen extends StatelessWidget {
                       context.setLocale(Locale('en'));
                     }
                   },
+                  trailing: Text(context.locale.languageCode.toUpperCase()
+                      .tr()),
                 ),
                 ListTile(
                   leading: Icon(Icons.info),
                   title: Text('home.settings.about'.tr()),
                   onTap: () {
-                    // Handle about
+                    context.pushNamed('about');
                   },
                 ),
               ],

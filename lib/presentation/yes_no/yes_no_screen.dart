@@ -1,4 +1,4 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
+import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +7,7 @@ import 'package:ptnzzn_random/presentation/yes_no/yes_no_cubit.dart';
 class YesNoScreen extends StatelessWidget {
   const YesNoScreen({super.key});
 
-  TypewriterAnimatedText getAnimatedText(String state) {
+  String getResultText(String state) {
     String text;
     if (state.isEmpty) {
       text = 'yes-no.label'.tr();
@@ -19,10 +19,7 @@ class YesNoScreen extends StatelessWidget {
       text = state;
     }
 
-    return TypewriterAnimatedText(
-      text,
-      speed: const Duration(milliseconds: 100),
-    );
+    return text;
   }
 
   @override
@@ -43,31 +40,44 @@ class YesNoScreen extends StatelessWidget {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                DefaultTextStyle(
-                  style: const TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black,
-                  ),
-                  child: AnimatedTextKit(
-                    animatedTexts: [
-                      getAnimatedText(state),
-                    ],
-                    repeatForever: false,
-                    totalRepeatCount: 1,
-                    onFinished: () {
-                      // Trigger a rebuild to update the text
-                      context.read<YesNoCubit>().emit(state);
-                    },
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    getResultText(state),
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                    style: const TextStyle(fontSize: 24),
                   ),
                 ),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 650),
+                  width: state.isEmpty ? 160 : 100,
+                  height: state.isEmpty ? 60 : 50,
+                  margin: const EdgeInsets.only(top: 48),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      padding: const EdgeInsets.all(16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    onPressed: () =>
+                        context.read<YesNoCubit>().getRandomYesNo(),
+                    child: Text(
+                      state.isEmpty
+                          ? 'yes-no.get-answer'.tr()
+                          : 'yes-no.again'.tr(),
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ),
+                )
               ],
             );
           },
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.read<YesNoCubit>().getRandomYesNo(),
-        child: const Icon(Icons.refresh),
       ),
     );
   }

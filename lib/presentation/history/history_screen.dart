@@ -1,8 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:ptnzzn_random/logic/storage/history_storage.dart';
+import 'package:ptnzzn_random/logic/storage/random_storage.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -21,8 +20,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Future<List<Map<String, dynamic>>> _loadHistory() async {
-    final historyStorage = context.read<HistoryStorage>();
-    return await historyStorage.readHistory();
+    final historyStorage = context.read<RandomStorage>();
+    return await historyStorage.readRandomHistory();
   }
 
   Future<void> _refreshHistory() async {
@@ -61,7 +60,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final historyStorage = context.read<HistoryStorage>();
+    final historyStorage = context.read<RandomStorage>();
 
     return Scaffold(
       appBar: AppBar(
@@ -70,7 +69,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: () async {
-              await historyStorage.clearHistory();
+              await historyStorage.clearRandomHistory();
               _refreshHistory();
             },
           ),

@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:ptnzzn_random/presentation/about/about_screen.dart';
 import 'package:ptnzzn_random/presentation/history/history_screen.dart';
 import 'package:ptnzzn_random/presentation/home/home_screen.dart';
 import 'package:ptnzzn_random/presentation/wheel/wheel_screen.dart';
@@ -28,6 +29,11 @@ class AppRouter {
               name: 'history',
               builder: (context, state) => HistoryScreen(),
             ),
+            GoRoute(
+              path: 'about',
+              name: 'about',
+              builder: (context, state) => AboutScreen(),
+            )
           ]),
     ],
   );

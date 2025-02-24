@@ -23,19 +23,35 @@
         "label": "Hãy để ông trời trả lời cho phân vân trong lòng bạn",
         "yes": "Ông trời đã giải đáp, và câu trả lời là ",
         "no": "Ông trời trả lời là ",
-        "no-end": ", có lẽ đó là điều may mắn."
+        "no-end": ", có lẽ đó là điều may mắn.",
+        "get-answer": "Nhận câu trả lời",
+        "again": "Thử lại"
     },
     "spin-wheel": {
         "input-label": "Nhập tên đi, các tên cách nhau bởi dấu xuống dòng",
         "spin": "Quay",
         "spinning": "Đang quay",
         "result": "Kết quả",
-        "winner": "Chúc mừng %s được chọn!"
+        "winner": "Chúc mừng, "
     },
     "history": {
         "title": "Lịch sử",
         "clear-history": "Xóa lịch sử",
         "clear-history-confirmation": "Bạn có chắc chắn muốn xóa lịch sử?",
         "no-history": "Không có lịch sử"
+    },
+    "theme": {
+        "label": "Chọn giao diện",
+        "system": "Hệ thống",
+        "light": "Sáng",
+        "dark": "Tối"
+    },
+    "language": {
+        "label": "Ngôn ngữ"
+    },
+    "about": {
+        "title": "Thông tin",
+        "version": "Phiên bản: ",
+        "description": "Đây là một ứng dụng đơn giản tôi tạo ra trong lúc rảnh rỗi. Ứng dụng giúp bạn đưa ra quyết định nhanh chóng với tùy chọn đơn giản \"có\" hoặc \"không,\" hoặc bằng cách quay vòng quay. Hoàn hảo cho bất kỳ ai cần chút ngẫu nhiên trong lựa chọn của mình."
     }
 }

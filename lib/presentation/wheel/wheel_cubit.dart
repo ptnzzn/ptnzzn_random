@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:ptnzzn_random/logic/storage/history_storage.dart';
+import 'package:ptnzzn_random/logic/storage/input_items_storage.dart';
+import 'package:ptnzzn_random/logic/storage/random_storage.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:rxdart/rxdart.dart';
@@ -7,17 +8,19 @@ import 'package:rxdart/rxdart.dart';
 part 'wheel_state.dart';
 
 class WheelCubit extends Cubit<WheelState> {
-  final HistoryStorage historyStorage;
+  final RandomStorage randomStorage = RandomStorage();
+  final InputItemsStorage inputItemsStorage = InputItemsStorage();
   final Random _random = Random();
   final BehaviorSubject<int> _selectedController = BehaviorSubject<int>();
 
-  WheelCubit(this.historyStorage) : super(WheelState.initial());
+  WheelCubit() : super(WheelState.initial());
 
   Stream<int> get selectedStream => _selectedController.stream;
 
   void updateItems(List<String> newItems) {
     final items = newItems.length > 1 ? newItems : ["Yes", "No"];
     emit(state.copyWith(items: items));
+    
   }
 
   void spinWheel() async {
@@ -32,9 +35,21 @@ class WheelCubit extends Cubit<WheelState> {
           isSpinning: false,
           result: result,
         ));
-        await historyStorage.writeHistory('common.spin-wheel', result);
+        await randomStorage.writeRandomHistory('common.spin-wheel', result);
       });
     }
+  }
+
+  Future<void> saveInputItems(List<String> items) async {
+    await inputItemsStorage.writeInputItems(items);
+  }
+
+  Future<List<String>> readInputItems() async {
+    return await inputItemsStorage.readInputItems();
+  }
+
+  Future<void> deleteInputItem(String item) async {
+    await inputItemsStorage.deleteInputItem(item);
   }
 
   @override

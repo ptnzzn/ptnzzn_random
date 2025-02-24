@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:ptnzzn_random/constants/app_router.dart';
 import 'package:ptnzzn_random/constants/app_theme.dart';
-import 'package:ptnzzn_random/logic/storage/history_storage.dart';
 import 'package:ptnzzn_random/logic/theme/theme_cubit.dart';
 import 'package:ptnzzn_random/presentation/wheel/wheel_cubit.dart';
 import 'package:ptnzzn_random/presentation/yes_no/yes_no_cubit.dart';
@@ -28,34 +27,40 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final historyStorage = HistoryStorage();
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => YesNoCubit(historyStorage),
+          create: (context) => YesNoCubit(),
           lazy: false,
         ),
         BlocProvider(
-          create: (context) => WheelCubit(historyStorage),
+          create: (context) => WheelCubit(),
           lazy: false,
         ),
         BlocProvider(
           create: (context) => ThemeCubit(),
           lazy: false,
         ),
-        Provider<HistoryStorage>.value(
-          value: historyStorage,
-        ),
       ],
-      child: MaterialApp.router(
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        debugShowCheckedModeBanner: false,
-        routerConfig: AppRouter.router,
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
+      child: BlocBuilder<ThemeCubit, ThemeData>(
+        builder: (context, theme) {
+          return MaterialApp.router(
+            theme: theme,
+            darkTheme: AppTheme.darkTheme,
+            debugShowCheckedModeBanner: false,
+            routerConfig: AppRouter.router,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            builder: (context, child) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                context.read<ThemeCubit>().updateSystemTheme();
+              });
+              return child!;
+            },
+          );
+        },
       ),
     );
   }

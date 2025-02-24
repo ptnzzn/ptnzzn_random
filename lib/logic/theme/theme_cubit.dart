@@ -5,12 +5,19 @@ import 'package:ptnzzn_random/constants/app_theme.dart';
 enum AppThemeMode { system, light, dark }
 
 class ThemeCubit extends Cubit<ThemeData> {
+  AppThemeMode _currentThemeMode = AppThemeMode.system;
+
   ThemeCubit() : super(AppTheme.lightTheme);
 
   void changeTheme(AppThemeMode themeMode, BuildContext context) {
-    switch (themeMode) {
+    _currentThemeMode = themeMode;
+    _applyTheme();
+  }
+
+  void _applyTheme() {
+    switch (_currentThemeMode) {
       case AppThemeMode.system:
-        final brightness = MediaQuery.of(context).platformBrightness;
+        final brightness = WidgetsBinding.instance.window.platformBrightness;
         if (brightness == Brightness.dark) {
           emit(AppTheme.darkTheme);
         } else {
@@ -25,4 +32,12 @@ class ThemeCubit extends Cubit<ThemeData> {
         break;
     }
   }
+
+  void updateSystemTheme() {
+    if (_currentThemeMode == AppThemeMode.system) {
+      _applyTheme();
+    }
+  }
+
+  AppThemeMode get currentThemeMode => _currentThemeMode;
 }
