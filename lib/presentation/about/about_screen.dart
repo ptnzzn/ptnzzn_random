@@ -1,9 +1,36 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'dart:math';
 
-class AboutScreen extends StatelessWidget {
+class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
+
+  @override
+  _AboutScreenState createState() => _AboutScreenState();
+}
+
+class _AboutScreenState extends State<AboutScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    );
+    _animation = Tween<double>(begin: 0, end: 2 * pi).animate(_controller);
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   Future<Map<String, String>> _getAppInfo() async {
     final packageInfo = await PackageInfo.fromPlatform();
@@ -16,8 +43,7 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-      ),
+      appBar: AppBar(),
       body: FutureBuilder<Map<String, String>>(
         future: _getAppInfo(),
         builder: (context, snapshot) {
@@ -32,10 +58,19 @@ class AboutScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Center(
-                    child: Image.asset(
-                      'assets/images/app_ico.png',
-                      width: 200,
-                      height: 200,
+                    child: AnimatedBuilder(
+                      animation: _animation,
+                      builder: (context, child) {
+                        return Transform.rotate(
+                          angle: _animation.value,
+                          child: child,
+                        );
+                      },
+                      child: Image.asset(
+                        'assets/images/app_ico.png',
+                        width: 200,
+                        height: 200,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),

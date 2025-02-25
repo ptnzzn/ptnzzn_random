@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ptnzzn_random/constants/app_color.dart';
 import 'package:ptnzzn_random/presentation/wheel/wheel_cubit.dart';
 import 'package:ptnzzn_random/logic/storage/input_items_storage.dart';
@@ -39,26 +41,100 @@ class WheelScreenListener extends StatelessWidget {
 class WheelScreen extends StatelessWidget {
   const WheelScreen({super.key});
 
-  void showHistory(BuildContext context) async {
-    final history = await context.read<WheelCubit>().readInputItems();
+  void showHistory(
+      BuildContext context, TextEditingController textController) async {
+    FocusScope.of(context).unfocus(); // Unfocus the text input
+    final history = await InputItemsStorage().readInputItems();
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (context) {
-        return ListView(
-          children: history.map((item) {
-            return Container(
-              padding: EdgeInsets.all(8.0),
-              child: Text(item),
+        return DraggableScrollableSheet(
+          initialChildSize: 0.8,
+          minChildSize: 0.5,
+          maxChildSize: 0.9,
+          expand: false,
+          builder: (context, scrollController) {
+            return Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                      Text('history.title'.tr(),
+                          style: TextStyle(fontSize: 18)),
+                      IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () async {
+                          await clearHistory();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    controller: scrollController,
+                    itemCount: history.length,
+                    itemBuilder: (context, index) {
+                      final item = history[index];
+                      final items = item['items'] as List<dynamic>? ?? [];
+                      final displayText = items.length > 3
+                          ? '${items[0]}, ${items[1]}, ... , ${items.last}'
+                          : items.join(', ');
+
+                      return Dismissible(
+                        key: Key(item.toString()),
+                        direction: DismissDirection.endToStart,
+                        onDismissed: (direction) async {
+                          history.removeAt(index);
+                          await InputItemsStorage().writeInputItems(
+                            history.map((item) => item.toString()).toList(),
+                          );
+                        },
+                        background: Container(
+                          color: Colors.red,
+                          alignment: Alignment.centerRight,
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Icon(Icons.delete, color: Colors.white),
+                        ),
+                        child: ListTile(
+                          title: Text(displayText),
+                          onTap: () {
+                            final newText = items.join('\n');
+                            textController.text = newText;
+                            context
+                                .read<WheelCubit>()
+                                .updateItems(newText.split('\n'));
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             );
-          }).toList(),
+          },
         );
       },
     );
   }
 
+  Future<void> clearHistory() async {
+    await InputItemsStorage().clearInputItems();
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextEditingController textController = TextEditingController();
+    final FocusNode textFocusNode = FocusNode();
 
     return Scaffold(
       appBar: AppBar(
@@ -78,6 +154,24 @@ class WheelScreen extends StatelessWidget {
               child: BlocBuilder<WheelCubit, WheelState>(
                 builder: (context, state) {
                   return FortuneWheel(
+                    animateFirst: false,
+                    hapticImpact: state.isSpinning
+                        ? HapticImpact.medium
+                        : HapticImpact.light,
+                    onAnimationStart: () {
+                      textFocusNode.unfocus();
+                    },
+                    indicators: <FortuneIndicator>[
+                      FortuneIndicator(
+                        alignment: Alignment.topCenter,
+                        child: TriangleIndicator(
+                          color: AppColors.orange,
+                          width: 20.0,
+                          height: 20.0,
+                          elevation: 0,
+                        ),
+                      ),
+                    ],
                     physics: CircularPanPhysics(
                       duration: Duration(seconds: 1),
                       curve: Curves.decelerate,
@@ -110,18 +204,25 @@ class WheelScreen extends StatelessWidget {
             const SizedBox(height: 20),
             BlocBuilder<WheelCubit, WheelState>(
               builder: (context, state) {
+                if (state.isAiMode) {
+                  FocusScope.of(context).requestFocus(textFocusNode);
+                }
                 return TextField(
                   controller: textController,
+                  focusNode: textFocusNode,
                   maxLines: 5,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'spin-wheel.input-label'.tr(),
+                    labelText: state.isAiMode
+                        ? 'AI Mode'
+                        : 'spin-wheel.input-label'.tr(),
                   ),
                   onChanged: (text) async {
-                    final items =
-                        text.split('\n').where((item) => item.isNotEmpty).toList();
+                    final items = text
+                        .split('\n')
+                        .where((item) => item.isNotEmpty)
+                        .toList();
                     context.read<WheelCubit>().updateItems(items);
-                    await InputItemsStorage().writeInputItems(items);
                   },
                   enabled: !state.isSpinning,
                 );
@@ -138,19 +239,23 @@ class WheelScreen extends StatelessWidget {
                       duration: Duration(milliseconds: 650),
                       child: GestureDetector(
                         onTap: () {
-                          
+                          context.read<WheelCubit>().toggleAiMode();
                         },
                         child: Container(
                           width: 60,
                           height: 60,
                           decoration: BoxDecoration(
-                            color: AppColors.blue,
+                            color: state.isAiMode
+                                ? AppColors.lightBlue
+                                : AppColors.blue,
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(
-                            Icons.star,
-                            size: 24,
-                            color: AppColors.white,
+                          child: Center(
+                            child: Image.asset(
+                              'assets/icons/ai.png',
+                              width: 32,
+                              height: 32,
+                            ),
                           ),
                         ),
                       ),
@@ -168,11 +273,35 @@ class WheelScreen extends StatelessWidget {
                         ),
                         onPressed: state.isSpinning
                             ? null
-                            : () => context.read<WheelCubit>().spinWheel(),
+                            : () {
+                                if (state.isAiMode) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text('AI Suggestion'),
+                                        content: Text(
+                                            'AI suggestion is in development.'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(),
+                                            child: Text('OK'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  context.read<WheelCubit>().spinWheel();
+                                }
+                              },
                         child: Text(
                           state.isSpinning
                               ? 'spin-wheel.spinning'.tr()
-                              : 'spin-wheel.spin'.tr(),
+                              : state.isAiMode
+                                  ? 'Ask AI'
+                                  : 'spin-wheel.spin'.tr(),
                           style: TextStyle(
                             color: state.isSpinning
                                 ? Colors.grey
@@ -187,7 +316,7 @@ class WheelScreen extends StatelessWidget {
                       opacity: state.isSpinning ? 0.0 : 1.0,
                       duration: Duration(milliseconds: 650),
                       child: GestureDetector(
-                        onTap: () => showHistory(context),
+                        onTap: () => showHistory(context, textController),
                         child: Container(
                           width: 60,
                           height: 60,

@@ -36,20 +36,16 @@ class WheelCubit extends Cubit<WheelState> {
           result: result,
         ));
         await randomStorage.writeRandomHistory('common.spin-wheel', result);
+        final existingItems = await inputItemsStorage.readInputItems();
+        if (!existingItems.contains(result)) {
+          await inputItemsStorage.writeInputItems(state.items);
+        }
       });
     }
   }
 
-  Future<void> saveInputItems(List<String> items) async {
-    await inputItemsStorage.writeInputItems(items);
-  }
-
-  Future<List<String>> readInputItems() async {
-    return await inputItemsStorage.readInputItems();
-  }
-
-  Future<void> deleteInputItem(String item) async {
-    await inputItemsStorage.deleteInputItem(item);
+  void toggleAiMode() {
+    emit(state.copyWith(isAiMode: !state.isAiMode));
   }
 
   @override

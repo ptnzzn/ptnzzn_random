@@ -52,6 +52,6 @@
     "about": {
         "title": "Thông tin",
         "version": "Phiên bản: ",
-        "description": "Đây là một ứng dụng đơn giản tôi tạo ra trong lúc rảnh rỗi. Ứng dụng giúp bạn đưa ra quyết định nhanh chóng với tùy chọn đơn giản \"có\" hoặc \"không,\" hoặc bằng cách quay vòng quay. Hoàn hảo cho bất kỳ ai cần chút ngẫu nhiên trong lựa chọn của mình."
+        "description": "Đây là một ứng dụng đơn giản tui tạo ra trong lúc rảnh. Ứng dụng giúp bạn đưa ra quyết định nhanh chóng với tùy chọn đơn giản \"có\" hoặc \"không,\" hoặc bằng cách quay vòng quay. Dành bất kỳ ai cần chút ngẫu nhiên trong lựa chọn của mình."
     }
 }
