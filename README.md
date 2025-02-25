@@ -3,14 +3,18 @@
 </p>
 <h1 align="center">ptnzzn_random</h1>
 
-# ptnzzn_random
-
 A random app with two features: Yes or No and Spin Wheel.
 
 ## Features
 
 - **Yes or No**: A simple feature to help you make decisions.
+  <p align="center">
+    <img src="assets/gifs/yes_no.gif" alt="Yes or No Feature" width="300">
+  </p>
 - **Spin Wheel**: A fun spin wheel to randomly select an option.
+  <p align="center">
+    <img src="assets/gifs/spin_wheel.gif" alt="Spin Wheel Feature" width="300">
+  </p>
 
 ## Getting Started
 
