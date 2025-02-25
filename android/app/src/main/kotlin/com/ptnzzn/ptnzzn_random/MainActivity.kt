@@ -1,4 +1,4 @@
-package com.example.ptnzzn_random
+package com.ptnzzn.ptnzzn_random
 
 import io.flutter.embedding.android.FlutterActivity
 

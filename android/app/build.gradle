@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.ptnzzn_random"
+    namespace = "com.ptnzzn.ptnzzn_random"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
