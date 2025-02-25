@@ -46,7 +46,7 @@ class YesNoScreen extends StatelessWidget {
                     getResultText(state),
                     textAlign: TextAlign.center,
                     softWrap: true,
-                    style: const TextStyle(fontSize: 24),
+                    style: const TextStyle(fontSize: 20),
                   ),
                 ),
                 AnimatedContainer(
