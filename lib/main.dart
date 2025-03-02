@@ -43,11 +43,12 @@ class MyApp extends StatelessWidget {
           lazy: false,
         ),
       ],
-      child: BlocBuilder<ThemeCubit, ThemeData>(
-        builder: (context, theme) {
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+        builder: (context, themeMode) {
           return MaterialApp.router(
-            theme: theme,
+            theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
+            themeMode: themeMode,
             debugShowCheckedModeBanner: false,
             routerConfig: AppRouter.router,
             localizationsDelegates: context.localizationDelegates,

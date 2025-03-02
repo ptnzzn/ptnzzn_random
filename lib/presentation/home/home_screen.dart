@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ptnzzn_random/constants/app_color.dart';
-import 'package:ptnzzn_random/constants/app_theme.dart';
 import 'package:ptnzzn_random/logic/theme/theme_cubit.dart';
 
 class HomeScreen extends StatelessWidget {

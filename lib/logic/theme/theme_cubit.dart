@@ -1,13 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:ptnzzn_random/constants/app_theme.dart';
+import 'dart:ui';
 
 enum AppThemeMode { system, light, dark }
 
-class ThemeCubit extends Cubit<ThemeData> {
+class ThemeCubit extends Cubit<ThemeMode> {
   AppThemeMode _currentThemeMode = AppThemeMode.system;
 
-  ThemeCubit() : super(AppTheme.lightTheme);
+  ThemeCubit() : super(ThemeMode.light);
 
   void changeTheme(AppThemeMode themeMode, BuildContext context) {
     _currentThemeMode = themeMode;
@@ -17,18 +17,18 @@ class ThemeCubit extends Cubit<ThemeData> {
   void _applyTheme() {
     switch (_currentThemeMode) {
       case AppThemeMode.system:
-        final brightness = WidgetsBinding.instance.window.platformBrightness;
+        final brightness = PlatformDispatcher.instance.platformBrightness;
         if (brightness == Brightness.dark) {
-          emit(AppTheme.darkTheme);
+          emit(ThemeMode.dark);
         } else {
-          emit(AppTheme.lightTheme);
+          emit(ThemeMode.light);
         }
         break;
       case AppThemeMode.light:
-        emit(AppTheme.lightTheme);
+        emit(ThemeMode.light);
         break;
       case AppThemeMode.dark:
-        emit(AppTheme.darkTheme);
+        emit(ThemeMode.dark);
         break;
     }
   }
