@@ -43,7 +43,7 @@ class WheelScreen extends StatelessWidget {
 
   void showHistory(
       BuildContext context, TextEditingController textController) async {
-    FocusScope.of(context).unfocus(); // Unfocus the text input
+    FocusScope.of(context).unfocus();
     final history = await InputItemsStorage().readInputItems();
     showModalBottomSheet(
       context: context,
@@ -216,6 +216,7 @@ class WheelScreen extends StatelessWidget {
                     labelText: state.isAiMode
                         ? 'AI Mode'
                         : 'spin-wheel.input-label'.tr(),
+                    hintText: state.isAiMode ? 'Type a topic and length' : '',
                   ),
                   onChanged: (text) async {
                     final items = text
@@ -235,12 +236,14 @@ class WheelScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     AnimatedOpacity(
-                      opacity: state.isSpinning ? 0.0 : 1.0,
+                      opacity: state.isSpinning || state.isAiAsking ? 0.0 : 1.0,
                       duration: Duration(milliseconds: 650),
                       child: GestureDetector(
-                        onTap: () {
-                          context.read<WheelCubit>().toggleAiMode();
-                        },
+                        onTap: state.isSpinning || state.isAiAsking
+                            ? null
+                            : () {
+                                context.read<WheelCubit>().toggleAiMode();
+                              },
                         child: Container(
                           width: 60,
                           height: 60,
@@ -263,35 +266,45 @@ class WheelScreen extends StatelessWidget {
                     SizedBox(width: 16),
                     AnimatedContainer(
                       duration: Duration(milliseconds: 650),
-                      width: state.isSpinning ? 140 : 200,
-                      height: state.isSpinning ? 50 : 60,
+                      width: state.isSpinning || state.isAiAsking ? 140 : 200,
+                      height: state.isSpinning || state.isAiAsking ? 50 : 60,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: state.isSpinning
+                          backgroundColor: state.isSpinning || state.isAiAsking
                               ? Colors.grey
                               : Theme.of(context).primaryColor,
                         ),
-                        onPressed: state.isSpinning
+                        onPressed: state.isSpinning || state.isAiAsking
                             ? null
-                            : () {
+                            : () async {
                                 if (state.isAiMode) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Text('AI Suggestion'),
-                                        content: Text(
-                                            'AI suggestion is in development.'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.of(context).pop(),
-                                            child: Text('OK'),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
+                                  try {
+                                    final aiResult = await context
+                                        .read<WheelCubit>()
+                                        .getAiResult(textController.text);
+                                    textController.text = aiResult;
+                                    context
+                                        .read<WheelCubit>()
+                                        .updateItems(aiResult.split('\n'));
+                                  } catch (e) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text('Error'),
+                                          content: Text(
+                                              'Failed to get AI response. Please try again.'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context).pop(),
+                                              child: Text('OK'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
                                 } else {
                                   context.read<WheelCubit>().spinWheel();
                                 }
@@ -299,11 +312,13 @@ class WheelScreen extends StatelessWidget {
                         child: Text(
                           state.isSpinning
                               ? 'spin-wheel.spinning'.tr()
-                              : state.isAiMode
-                                  ? 'Ask AI'
-                                  : 'spin-wheel.spin'.tr(),
+                              : state.isAiAsking
+                                  ? 'Asking...'
+                                  : state.isAiMode
+                                      ? 'Ask AI'
+                                      : 'spin-wheel.spin'.tr(),
                           style: TextStyle(
-                            color: state.isSpinning
+                            color: state.isSpinning || state.isAiAsking
                                 ? Colors.grey
                                 : AppColors.white,
                             fontSize: 16,
@@ -313,7 +328,7 @@ class WheelScreen extends StatelessWidget {
                     ),
                     SizedBox(width: 16),
                     AnimatedOpacity(
-                      opacity: state.isSpinning ? 0.0 : 1.0,
+                      opacity: state.isSpinning || state.isAiAsking ? 0.0 : 1.0,
                       duration: Duration(milliseconds: 650),
                       child: GestureDetector(
                         onTap: () => showHistory(context, textController),

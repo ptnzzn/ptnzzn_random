@@ -6,6 +6,7 @@ class WheelState {
   final bool isSpinning;
   final String? result;
   final bool isAiMode;
+  final bool isAiAsking;
 
   WheelState({
     required this.items,
@@ -13,6 +14,7 @@ class WheelState {
     required this.isSpinning,
     this.result,
     this.isAiMode = false,
+    this.isAiAsking = false,
   });
 
   factory WheelState.initial() {
@@ -22,6 +24,7 @@ class WheelState {
       isSpinning: false,
       result: null,
       isAiMode: false,
+      isAiAsking: false,
     );
   }
 
@@ -31,6 +34,7 @@ class WheelState {
     bool? isSpinning,
     String? result,
     bool? isAiMode,
+    bool? isAiAsking,
   }) {
     return WheelState(
       items: items ?? this.items,
@@ -38,6 +42,7 @@ class WheelState {
       isSpinning: isSpinning ?? this.isSpinning,
       result: result,
       isAiMode: isAiMode ?? this.isAiMode,
+      isAiAsking: isAiAsking ?? this.isAiAsking,
     );
   }
 }

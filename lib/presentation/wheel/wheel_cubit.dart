@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:ptnzzn_random/logic/storage/input_items_storage.dart';
 import 'package:ptnzzn_random/logic/storage/random_storage.dart';
 import 'dart:async';
@@ -46,6 +48,24 @@ class WheelCubit extends Cubit<WheelState> {
 
   void toggleAiMode() {
     emit(state.copyWith(isAiMode: !state.isAiMode));
+  }
+
+  Future<String> getAiResult(String inputPrompt) async {
+    emit(state.copyWith(isAiAsking: true));
+    final model = GenerativeModel(
+      model: 'gemini-2.0-pro-exp-02-05', 
+      apiKey: dotenv.env['GEMINI_API_KEY'] ?? '',
+    );
+    final prompt = 'Type a list of items with $inputPrompt each item is separated by a new line. Only response item and items have no number on front of each item.';
+    final content = [Content.text(prompt)];
+    try {
+      final response = await model.generateContent(content);
+      emit(state.copyWith(isAiAsking: false, isAiMode: false));
+      return response.text ?? '';
+    } catch (e) {
+      emit(state.copyWith(isAiAsking: false));
+      rethrow;
+    }
   }
 
   @override
